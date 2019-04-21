@@ -25,15 +25,17 @@
 
 2. ucore的就绪队列数据结构在哪定义？在哪进行修改？
 
- > kern/schedule/sched.c
+ > 定义在kern/schedule/sched.c的static struct run_queue __rq；
 
- > static struct run_queue __rq;
+ > 修改：在进程调度、创建等过程中修改;
 
 3. ucore的等待队列数据结构在哪定义？在哪进行修改？
 
  > kern/schedule/sched.c
 
  > static list_entry_t timer_list;
+ 
+ >修改：进程执行过程中修改
 
 4. 尝试跟踪ucore中的调度过程。
 
@@ -47,17 +49,17 @@
 
 2. 调度函数schedule()的调用函数分析，了解进程调度的原因。请分析ucore中所有可能的调度位置，并说明可能的调用原因。
 
- > do_exit
+ > do_exit：进程退出，等待调度
 
- > do_wait
+ > do_wait：进程等待，等待调度
 
- > cpu_idle
+ > cpu_idle：内核idle线程侦测到并调度新的就绪进程
 
- > lock
+ > lock：占用
+ 
+ > init_main：调度新进程执行
 
- > init_main
-
- > trap
+ > trap：中断，需要进行调度
 
 ### 16.3 时间片轮转调度算法
 
@@ -98,6 +100,7 @@
 4. 无符号数的有符号比较会产生什么效果？
 
  > [无符号数的有符号比较会产生什么效果？](https://piazza.com/class/i5j09fnsl7k5x0?cid=357)
+ > stride必须设置为有符号整数的最大值，才能够在溢出时也保证正常工作
 
 5. 什么是斜堆(skew heap)？斜堆在stride算法的实现中有什么用？
 
